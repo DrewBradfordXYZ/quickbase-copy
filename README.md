@@ -39,39 +39,45 @@ These are the three things to look out for that will be unique to you.
 
 CSS goes in the head tag
 
-```
-<link href="https://builderprogram-USERNAME.quickbase.com/nav/app/APPDBID/action/AppDBPages?a=dbpage&pageID=PAGEID" rel="preload" as="style">
+```html
+<link
+  href="https://builderprogram-USERNAME.quickbase.com/nav/app/APPDBID/action/AppDBPages?a=dbpage&pageID=PAGEID"
+  rel="preload"
+  as="style"
+/>
 ```
 
 JS goes at the bottom of the body tag
 
-```
+```html
 <script src="https://builderprogram-USERNAME.quickbase.com/nav/app/APPDBID/action/AppDBPages?a=dbpage&pageID=PAGEID"></script>
 ```
 
 Here is a full page HTML example.
 
-```
-<!doctype html>
+```html
+<!DOCTYPE html>
 <html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>QB Copy</title>
+    <link
+      href="https://builderprogram-USERNAME.quickbase.com/nav/app/APPDBID/action/AppDBPages?a=dbpage&pageID=PAGEID"
+      rel="preload"
+      as="style"
+    />
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>QB Copy</title>
-  <link href="https://builderprogram-USERNAME.quickbase.com/nav/app/APPDBID/action/AppDBPages?a=dbpage&pageID=PAGEID" rel="preload" as="style">
-</head>
-
-<body>
-  <noscript>
-    <strong>
-      We're sorry but this app doesn't work properly without
-      JavaScript enabled. Please enable it to continue.
-    </strong>
-  </noscript>
-  <div id="root"></div>
-  <script src="https://builderprogram-USERNAME.quickbase.com/nav/app/APPDBID/action/AppDBPages?a=dbpage&pageID=PAGEID"></script>
-</body>
-
+  <body>
+    <noscript>
+      <strong>
+        We're sorry but this app doesn't work properly without JavaScript
+        enabled. Please enable it to continue.
+      </strong>
+    </noscript>
+    <div id="root"></div>
+    <script src="https://builderprogram-USERNAME.quickbase.com/nav/app/APPDBID/action/AppDBPages?a=dbpage&pageID=PAGEID"></script>
+  </body>
 </html>
 ```
