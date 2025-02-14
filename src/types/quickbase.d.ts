@@ -7,10 +7,10 @@ declare module "quickbase" {
       appToken?: string;
     });
     getApp(options: { appId: string }): Promise<any>;
-    // Add the new method
     getTempTokenDBID(options: {
       dbid: string;
     }): Promise<{ temporaryAuthorization: string }>;
+
     // Add other methods as needed
   }
 }

@@ -1,6 +1,5 @@
 import { QuickBase } from "quickbase";
 
-// Define the shape of the app data response (matches quickbase.d.ts)
 interface AppData {
   name: string;
   id: string;
