@@ -29,6 +29,14 @@ Put together it looks like this.
 https://builderprogram-USERNAME.quickbase.com/nav/app/APPDBID/action/AppDBPages?a=dbpage&pageID=PAGEID
 ```
 
+These are the three things to look out for that will be unique to you.
+
+1. The base URL
+2. APPDBID
+3. PAGEID
+
+</br>
+
 CSS goes in the head tag
 
 ```
@@ -40,12 +48,6 @@ JS goes at the bottom of the body tag
 ```
 <script src="https://builderprogram-USERNAME.quickbase.com/nav/app/APPDBID/action/AppDBPages?a=dbpage&pageID=PAGEID"></script>
 ```
-
-These are the three things to look out for that will be unique to you.
-
-1. The base URL
-2. APPDBID
-3. PAGEID
 
 Here is a full page HTML example.
 
