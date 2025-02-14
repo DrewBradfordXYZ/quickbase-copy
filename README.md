@@ -7,9 +7,11 @@ This is a React App that integrates with the QB RESTful JSON API using https://g
 
 This is a work in progress.
 
-## This is how you build the href="url" inorder to link your code pages together.
+</br>
 
-Navigate to the Pages section in your app. In my builder account it looks something like this, but will likely be different for you.
+## Follow these steps to link your code pages together.
+
+Navigate to the Pages section in your app. This is the page the lists all your code pages. In my builder account it looks something like this, but will likely be different for you.
 
 ```
 https://builderprogram-USERNAME.quickbase.com/nav/app/APPDBID/action/AppDBPages
