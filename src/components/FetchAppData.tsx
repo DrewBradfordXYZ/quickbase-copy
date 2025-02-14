@@ -1,8 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { appData } from "../services/appData";
-import { QuickBaseRequestGetApp } from "quickbase";
 
-const FetchAppData: React.FC<QuickBaseRequestGetApp> = ({ appId }) => {
+interface FetchAppDataProps {
+  appId: string;
+}
+
+const FetchAppData: React.FC<FetchAppDataProps> = ({ appId }) => {
   const [appName, setAppName] = useState<string>("");
   const [errorAppName, setErrorAppName] = useState<string | null>(null);
 
