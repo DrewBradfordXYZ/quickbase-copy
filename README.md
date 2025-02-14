@@ -23,6 +23,12 @@ Add this to the end.
 ?a=dbpage&pageID=PAGEID
 ```
 
+Put together it looks like this.
+
+```
+https://builderprogram-USERNAME.quickbase.com/nav/app/APPDBID/action/AppDBPages?a=dbpage&pageID=PAGEID
+```
+
 CSS goes in the head tag
 
 ```
