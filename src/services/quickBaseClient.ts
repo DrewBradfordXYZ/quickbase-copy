@@ -1,8 +1,4 @@
-import {
-  QuickBase,
-  QuickBaseResponseGetAppTables,
-  QuickBaseResponseGetApp,
-} from "quickbase";
+import { QuickBase } from "quickbase";
 
 // Function to generate a new temp token using dbid
 const generateTempToken = async (): Promise<string> => {
@@ -32,10 +28,8 @@ const generateTempToken = async (): Promise<string> => {
 };
 
 // Function to initialize QuickBase client
-const createQuickBaseClient = async (
-  tempToken: string | null = null
-): Promise<QuickBase> => {
-  let token = tempToken;
+export const quickBaseClient = async (): Promise<QuickBase> => {
+  let token: string | null = null;
 
   if (!token && import.meta.env.MODE !== "development") {
     // Check if the token is stored in sessionStorage
@@ -66,34 +60,4 @@ const createQuickBaseClient = async (
     userToken: import.meta.env.MODE === "development" ? token : undefined,
     tempToken: import.meta.env.MODE !== "development" ? token : undefined,
   });
-};
-
-// Function to fetch app data
-export const getAppData = async (
-  appId: string,
-  tempToken: string | null = null
-): Promise<QuickBaseResponseGetApp> => {
-  try {
-    const quickbase = await createQuickBaseClient(tempToken);
-    const results = await quickbase.getApp({ appId });
-    return results;
-  } catch (err) {
-    console.error("Error fetching app data:", err);
-    throw err;
-  }
-};
-
-// Function to list all tables of the app
-export const listAppTables = async (
-  appId: string,
-  tempToken: string | null = null
-): Promise<QuickBaseResponseGetAppTables> => {
-  try {
-    const quickbase = await createQuickBaseClient(tempToken);
-    const results = await quickbase.getAppTables({ appId });
-    return results;
-  } catch (err) {
-    console.error("Error fetching app tables:", err);
-    throw err;
-  }
 };
