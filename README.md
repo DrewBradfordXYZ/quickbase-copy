@@ -2,8 +2,17 @@
 
 This is a React App that integrates with the QB RESTful JSON API using https://github.com/tflanagan/node-quickbase
 
--In development it uses a user token.
--In production it generates a temporary token
+The development environment uses a user token.
+
+```bash
+npm run dev
+```
+
+In production a user generated temporary token is used.
+
+```bash
+npm run build
+```
 
 This is a work in progress.
 
