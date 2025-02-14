@@ -1,6 +1,7 @@
 import React, { JSX } from "react";
 import FetchAppData from "./components/FetchAppData";
 import FetchAppTables from "./components/FetchAppTables";
+import FetchTableFields from "./components/FetchTableFields";
 
 const App: React.FC = (): JSX.Element => {
   const appId = import.meta.env.VITE_QUICKBASE_APP_DBID;
@@ -9,6 +10,7 @@ const App: React.FC = (): JSX.Element => {
     <>
       <FetchAppData appId={appId} />
       <FetchAppTables appId={appId} />
+      <FetchTableFields tableId={"buwai2zr4"} />
     </>
   );
 };
