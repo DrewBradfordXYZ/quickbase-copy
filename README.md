@@ -46,7 +46,7 @@ These are the three things to look out for that will be unique to you.
 
 </br>
 
-CSS goes in the head tag
+CSS goes in the head tag. Name your code page with a .css extention.
 
 ```html
 <link
@@ -56,7 +56,7 @@ CSS goes in the head tag
 />
 ```
 
-JS goes at the bottom of the body tag
+JS goes at the bottom of the body tag. Name your code page with a .js extention.
 
 ```html
 <script src="https://builderprogram-USERNAME.quickbase.com/nav/app/APPDBID/action/AppDBPages?a=dbpage&pageID=PAGEID"></script>
