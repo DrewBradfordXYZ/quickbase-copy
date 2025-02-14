@@ -8,7 +8,7 @@ The development environment uses a user token.
 npm run dev
 ```
 
-In production a user generated temporary token is used.
+In production individual temporary token's are generated.
 
 ```bash
 npm run build
