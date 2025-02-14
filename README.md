@@ -33,9 +33,11 @@ For JS files in your html code-page add a script tag to the bottom of the body t
 <script src="https://builderprogram-USERNAME.quickbase.com/nav/app/APPDBID/action/AppDBPages?a=dbpage&pageID=PAGEID"></script>
 ```
 
-Make sure to update
--APPDBID
--PAGEID
+Things to check.
+
+1. The base URL
+2. APPDBID
+3. PAGEID
 
 Here is a full page HTML example.
 
@@ -51,12 +53,12 @@ Here is a full page HTML example.
 </head>
 
 <body>
-<noscript>
-<strong>
-We're sorry but this app doesn't work properly without
-JavaScript enabled. Please enable it to continue.
-</strong>
-</noscript>
+  <noscript>
+    <strong>
+      We're sorry but this app doesn't work properly without
+      JavaScript enabled. Please enable it to continue.
+    </strong>
+  </noscript>
   <div id="root"></div>
   <script src="https://builderprogram-USERNAME.quickbase.com/nav/app/APPDBID/action/AppDBPages?a=dbpage&pageID=PAGEID"></script>
 </body>
