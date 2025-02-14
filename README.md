@@ -1,6 +1,6 @@
 # A QuickBase Copy Feature
 
-This is a React App that integrates with the QB RESTful JSON API using https://github.com/tflanagan/node-quickbase
+This is a React App that integrates with the [QuickBase RESTful JSON API](https://developer.quickbase.com/) using [tflanagan/node-quickbase](https://github.com/tflanagan/node-quickbase)
 
 The development environment uses a user token.
 
