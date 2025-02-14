@@ -1,10 +1,8 @@
-import { QuickBase } from "quickbase";
-
-interface AppData {
-  name: string;
-  id: string;
-  [key: string]: any;
-}
+import {
+  QuickBase,
+  QuickBaseResponseGetAppTables,
+  QuickBaseResponseGetApp,
+} from "quickbase";
 
 // Function to generate a new temp token using dbid
 const generateTempToken = async (): Promise<string> => {
@@ -74,13 +72,28 @@ const createQuickBaseClient = async (
 export const getAppData = async (
   appId: string,
   tempToken: string | null = null
-): Promise<AppData> => {
+): Promise<QuickBaseResponseGetApp> => {
   try {
     const quickbase = await createQuickBaseClient(tempToken);
     const results = await quickbase.getApp({ appId });
     return results;
   } catch (err) {
     console.error("Error fetching app data:", err);
+    throw err;
+  }
+};
+
+// Function to list all tables of the app
+export const listAppTables = async (
+  appId: string,
+  tempToken: string | null = null
+): Promise<QuickBaseResponseGetAppTables> => {
+  try {
+    const quickbase = await createQuickBaseClient(tempToken);
+    const results = await quickbase.getAppTables({ appId });
+    return results;
+  } catch (err) {
+    console.error("Error fetching app tables:", err);
     throw err;
   }
 };
