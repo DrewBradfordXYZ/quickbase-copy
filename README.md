@@ -23,19 +23,19 @@ Add this to the end.
 ?a=dbpage&pageID=PAGEID
 ```
 
-For css files in your html code-page add a link tag in the header tag
+CSS goes in the head tag
 
 ```
 <link href="https://builderprogram-USERNAME.quickbase.com/nav/app/APPDBID/action/AppDBPages?a=dbpage&pageID=PAGEID" rel="preload" as="style">
 ```
 
-For JS files in your html code-page add a script tag to the bottom of the body tag
+JS goes at the bottom of the body tag
 
 ```
 <script src="https://builderprogram-USERNAME.quickbase.com/nav/app/APPDBID/action/AppDBPages?a=dbpage&pageID=PAGEID"></script>
 ```
 
-Things to check.
+These are the three things to look out for that will be unique to you.
 
 1. The base URL
 2. APPDBID
