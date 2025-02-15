@@ -51,8 +51,7 @@ CSS goes in the head tag. Name your code page with a .css extention.
 ```html
 <link
   href="https://builderprogram-USERNAME.quickbase.com/nav/app/APPDBID/action/AppDBPages?a=dbpage&pageID=PAGEID"
-  rel="preload"
-  as="style"
+  rel="stylesheet"
 />
 ```
 
@@ -73,11 +72,9 @@ Here is a full page HTML example.
     <title>Your Page Title</title>
     <link
       href="https://builderprogram-USERNAME.quickbase.com/nav/app/APPDBID/action/AppDBPages?a=dbpage&pageID=PAGEID"
-      rel="preload"
-      as="style"
+      rel="stylesheet"
     />
   </head>
-
   <body>
     <noscript>
       <strong>
