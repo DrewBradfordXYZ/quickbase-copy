@@ -9,14 +9,16 @@ dotenv.config();
 const __filename = fileURLToPath(import.meta.url); // this line is needed to get the absolute path of the current file in an ES6 module,
 const __dirname = path.dirname(__filename);
 
-const getLatestIndexFile = () => {
+const getLatestIndexFile = (extension) => {
   const assetsDir = path.resolve(__dirname, "../dist/assets");
   const files = fs.readdirSync(assetsDir);
   const indexFile = files.find(
-    (file) => file.startsWith("index-") && file.endsWith(".js")
+    (file) => file.startsWith("index-") && file.endsWith(extension)
   );
   if (!indexFile) {
-    throw new Error("Index file not found in dist/assets directory");
+    throw new Error(
+      `Index file not found in dist/assets directory with extension ${extension}`
+    );
   }
   return path.join(assetsDir, indexFile);
 };
@@ -32,10 +34,13 @@ const updateCodePage = async () => {
   const quickbasePagePath = process.env.QUICKBASE_PAGE_URL;
   const username = process.env.QUICKBASE_USERNAME;
   const password = process.env.QUICKBASE_PASSWORD;
-  const pageId = process.env.QUICKBASE_PAGE_ID;
+  const jsPageId = process.env.QUICKBASE_JS_PAGE_ID;
+  const cssPageId = process.env.QUICKBASE_CSS_PAGE_ID;
 
-  const filePath = getLatestIndexFile();
-  const codeContent = fs.readFileSync(filePath, "utf8");
+  const jsFilePath = getLatestIndexFile(".js");
+  const cssFilePath = getLatestIndexFile(".css");
+  const jsCodeContent = fs.readFileSync(jsFilePath, "utf8");
+  const cssCodeContent = fs.readFileSync(cssFilePath, "utf8");
 
   // --no-sandbox is required when running Puppeteer on a Linux server
   const browser = await puppeteer.launch({
@@ -61,25 +66,33 @@ const updateCodePage = async () => {
       throw new Error("Login failed. Please check your credentials.");
     }
 
-    // Navigate to the code page
-    const url = `${quickbasePagePath}${pageId}`;
-    console.log(`Navigating to Code Page pageId=${pageId}...`);
-    await page.goto(url);
-    await page.waitForNavigation({ waitUntil: "networkidle0" });
+    // Function to update code page content
+    const updatePageContent = async (pageId, codeContent) => {
+      const url = `${quickbasePagePath}${pageId}`;
+      console.log(`Go to Code Page ${pageId} ...`);
+      await page.goto(url);
+      await page.waitForNavigation({ waitUntil: "networkidle0" });
 
-    // Update the code page content
-    await page.evaluate((codeContent) => {
-      const codeEditor = document.querySelector("#pagetext");
-      if (codeEditor) {
-        codeEditor.value = codeContent;
-      }
-    }, codeContent);
+      // Update the code page content
+      await page.evaluate((codeContent) => {
+        const codeEditor = document.querySelector("#pagetext");
+        if (codeEditor) {
+          codeEditor.value = codeContent;
+        }
+      }, codeContent);
 
-    // Save the changes
-    await page.click("#btnSaveDone");
-    console.log("Updating Code Page...");
-    await page.waitForNavigation();
-    console.log("Code Page updated successfully.");
+      // Save the changes
+      await page.click("#btnSaveDone");
+      console.log(`Updating Code Page ${pageId} ...`);
+      await page.waitForNavigation();
+      console.log(`Saved Code Page ${pageId}`);
+    };
+
+    // Update JavaScript code page
+    await updatePageContent(jsPageId, jsCodeContent);
+
+    // Update CSS code page
+    await updatePageContent(cssPageId, cssCodeContent);
 
     // Set to true to test screenshot capture
     if (false) {
