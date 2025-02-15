@@ -4,13 +4,14 @@ import FetchAppTables from "./components/FetchAppTables";
 import FetchTableFields from "./components/FetchTableFields";
 
 const App: React.FC = (): JSX.Element => {
-  const appId = import.meta.env.VITE_QUICKBASE_APP_DBID;
+  const appDbid = import.meta.env.VITE_QUICKBASE_APP_DBID;
+  const dbid = "buwai2zws";
 
   return (
     <>
-      <FetchAppData appId={appId} />
-      <FetchAppTables appId={appId} />
-      <FetchTableFields tableId={"buwai2zr4"} />
+      <FetchAppData appId={appDbid} dbid={appDbid} />
+      <FetchAppTables appId={appDbid} dbid={appDbid} />
+      <FetchTableFields tableId={dbid} dbid={dbid} />
     </>
   );
 };

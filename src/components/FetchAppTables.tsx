@@ -4,16 +4,17 @@ import { QuickBaseResponseGetAppTables } from "quickbase";
 
 interface FetchAppTablesProps {
   appId: string;
+  dbid: string;
 }
 
-const FetchAppTables: React.FC<FetchAppTablesProps> = ({ appId }) => {
+const FetchAppTables: React.FC<FetchAppTablesProps> = ({ appId, dbid }) => {
   const [tables, setTables] = useState<QuickBaseResponseGetAppTables>([]);
   const [errorTables, setErrorTables] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchAppTables = async () => {
       try {
-        const results = await appTables(appId);
+        const results = await appTables(appId, dbid);
         setTables(results);
       } catch (err) {
         setErrorTables("Failed to fetch app tables");
@@ -21,7 +22,7 @@ const FetchAppTables: React.FC<FetchAppTablesProps> = ({ appId }) => {
     };
 
     fetchAppTables();
-  }, [appId]);
+  }, [appId, dbid]);
 
   return (
     <div>

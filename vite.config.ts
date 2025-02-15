@@ -5,4 +5,15 @@ import tailwindcss from "@tailwindcss/vite";
 // https://vite.dev/config/
 export default defineConfig({
   plugins: [react(), tailwindcss()],
+  define: {
+    "process.env": process.env,
+  },
+  build: {
+    sourcemap: false,
+    rollupOptions: {
+      output: {
+        sourcemapExcludeSources: true, // exclude node_modules sources from sourcemap
+      },
+    },
+  },
 });

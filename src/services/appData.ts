@@ -3,9 +3,10 @@ import { apiRequest } from "./apiRequest";
 
 // Function to fetch app data
 export const appData = async (
-  appId: string
+  appId: string,
+  dbid: string
 ): Promise<QuickBaseResponseGetApp> => {
-  return apiRequest(async (quickbase) => {
+  return apiRequest(dbid, async (quickbase) => {
     const results = await quickbase.getApp({ appId });
     return results;
   });

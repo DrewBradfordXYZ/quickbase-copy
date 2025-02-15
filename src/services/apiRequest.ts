@@ -1,14 +1,16 @@
+import { QuickBase } from "quickbase";
 import { quickBaseClient } from "./quickBaseClient";
 
 export const apiRequest = async <T>(
-  requestFn: (quickbase: any) => Promise<T>
+  dbid: string,
+  requestFn: (quickbase: QuickBase) => Promise<T>
 ): Promise<T> => {
+  const quickbase = await quickBaseClient(dbid);
   try {
-    const quickbase = await quickBaseClient();
-    const results = await requestFn(quickbase);
-    return results;
-  } catch (err) {
-    console.error("Error making API request:", err);
-    throw err;
+    const response = await requestFn(quickbase);
+    return response;
+  } catch (error) {
+    console.error("API request failed:", error);
+    throw error;
   }
 };

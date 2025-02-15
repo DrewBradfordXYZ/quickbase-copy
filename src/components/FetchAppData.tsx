@@ -3,16 +3,17 @@ import { appData } from "../services/appData";
 
 interface FetchAppDataProps {
   appId: string;
+  dbid: string;
 }
 
-const FetchAppData: React.FC<FetchAppDataProps> = ({ appId }) => {
+const FetchAppData: React.FC<FetchAppDataProps> = ({ appId, dbid }) => {
   const [appName, setAppName] = useState<string>("");
   const [errorAppName, setErrorAppName] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchAppData = async () => {
       try {
-        const results = await appData(appId);
+        const results = await appData(appId, dbid);
         setAppName(results.name);
       } catch (err) {
         setErrorAppName("Failed to fetch app data");
@@ -20,7 +21,7 @@ const FetchAppData: React.FC<FetchAppDataProps> = ({ appId }) => {
     };
 
     fetchAppData();
-  }, [appId]);
+  }, [appId, dbid]);
 
   return (
     <div>

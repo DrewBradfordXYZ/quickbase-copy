@@ -4,16 +4,20 @@ import { QuickBaseResponseGetFields } from "quickbase";
 
 interface FetchTableFieldsProps {
   tableId: string;
+  dbid: string;
 }
 
-const FetchTableFields: React.FC<FetchTableFieldsProps> = ({ tableId }) => {
+const FetchTableFields: React.FC<FetchTableFieldsProps> = ({
+  tableId,
+  dbid,
+}) => {
   const [fields, setFields] = useState<QuickBaseResponseGetFields>([]);
   const [errorFields, setErrorFields] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchTableFields = async () => {
       try {
-        const results = await tableFields(tableId);
+        const results = await tableFields(tableId, dbid);
         setFields(results);
       } catch (err) {
         setErrorFields("Failed to fetch table fields");
@@ -21,7 +25,7 @@ const FetchTableFields: React.FC<FetchTableFieldsProps> = ({ tableId }) => {
     };
 
     fetchTableFields();
-  }, [tableId]);
+  }, [tableId, dbid]);
 
   return (
     <div>

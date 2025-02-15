@@ -1,23 +1,16 @@
 import { QuickBase } from "quickbase";
 
 // Function to generate a new temp token using dbid
-const generateTempToken = async (): Promise<string> => {
+const generateTempToken = async (dbid: string): Promise<string> => {
   const quickbase = new QuickBase({
     realm: import.meta.env.VITE_QUICKBASE_REALM,
   });
   try {
     const response = await quickbase.getTempTokenDBID({
-      dbid: import.meta.env.VITE_QUICKBASE_APP_DBID,
+      dbid: dbid,
     });
     const token = response.temporaryAuthorization;
-    if (import.meta.env.MODE !== "development") {
-      const expiryTime = new Date().getTime() + 5 * 60 * 1000; // 5 minutes from now
-      sessionStorage.setItem("quickbase_temp_token", token);
-      sessionStorage.setItem(
-        "quickbase_temp_token_expiry",
-        expiryTime.toString()
-      );
-    }
+    console.log("Generated temp token:", token);
     return token;
   } catch (error) {
     console.error("Failed to generate temp token:", error);
@@ -28,23 +21,13 @@ const generateTempToken = async (): Promise<string> => {
 };
 
 // Function to initialize QuickBase client
-export const quickBaseClient = async (): Promise<QuickBase> => {
+export const quickBaseClient = async (dbid: string): Promise<QuickBase> => {
   let token: string | null = null;
 
-  if (!token && import.meta.env.MODE !== "development") {
-    // Check if the token is stored in sessionStorage
-    token = sessionStorage.getItem("quickbase_temp_token");
-    const tokenExpiry = sessionStorage.getItem("quickbase_temp_token_expiry");
-
-    // Check if the token is expired
-    if (
-      !token ||
-      !tokenExpiry ||
-      new Date().getTime() >= parseInt(tokenExpiry)
-    ) {
-      token = await generateTempToken();
-    }
-  } else if (!token) {
+  if (import.meta.env.MODE !== "development") {
+    // Always generate a new temp token for non-development environments
+    token = await generateTempToken(dbid);
+  } else {
     // Use userToken for development
     token = import.meta.env.VITE_QUICKBASE_USER_TOKEN;
   }
@@ -54,6 +37,8 @@ export const quickBaseClient = async (): Promise<QuickBase> => {
       "Token is not available. Please check your environment variables."
     );
   }
+
+  console.log("Using token:", token);
 
   return new QuickBase({
     realm: import.meta.env.VITE_QUICKBASE_REALM,
