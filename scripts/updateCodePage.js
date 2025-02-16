@@ -3,6 +3,7 @@ import fs from "fs";
 import path from "path";
 import dotenv from "dotenv";
 import { fileURLToPath } from "url";
+import chalk from "chalk";
 
 dotenv.config();
 
@@ -51,27 +52,103 @@ const updateCodePage = async () => {
 
   try {
     // Log in to QuickBase
-    await page.goto(quickbaseUrl);
-    console.log("Signing into QuickBase");
-    await page.type("input[name='loginid']", username);
-    await page.type("input[name='password']", password);
-    await page.click("#signin");
-    console.log("Loading Page...");
-    await page.waitForNavigation({ waitUntil: "networkidle0" });
-    console.log("Signed In to QuickBase.");
+    console.log(chalk.bold.underline.whiteBright("Logging in to QuickBase"));
+    let loginSuccess = false;
+    const maxLoginAttempts = 3;
+    let loginAttempt = 0;
 
-    // Check if login was successful
-    const loginError = await page.$(".login-error");
-    if (loginError) {
-      throw new Error("Login failed. Please check your credentials.");
+    while (!loginSuccess && loginAttempt < maxLoginAttempts) {
+      try {
+        loginAttempt++;
+        if (loginAttempt > 1) {
+          console.log(chalk.blue(`Login attempt ${loginAttempt}`));
+        }
+        await page.goto(quickbaseUrl, { timeout: 60000 });
+        await page.type("input[name='loginid']", username);
+        await page.type("input[name='password']", password);
+        await page.click("#signin");
+        await page.waitForNavigation({
+          waitUntil: "networkidle0",
+          timeout: 60000,
+        });
+
+        // Check if login was successful
+        const loginError = await page.$(".login-error");
+        if (loginError) {
+          throw new Error("Login failed. Please check your credentials.");
+        }
+
+        console.log(chalk.bold.green("Signed In to QuickBase."));
+        loginSuccess = true;
+      } catch (loginError) {
+        console.error(
+          chalk.red(
+            `Login attempt ${loginAttempt} failed: ${loginError.message}`
+          )
+        );
+        if (loginAttempt >= maxLoginAttempts) {
+          console.error(
+            chalk.bold.bgRed("Max login attempts reached. Exiting.")
+          );
+          await browser.close();
+          return;
+        }
+        // Add a delay before retrying
+        await new Promise((resolve) => setTimeout(resolve, 5000));
+      }
     }
 
     // Function to update code page content
     const updatePageContent = async (pageId, codeContent) => {
       const url = `${quickbasePagePath}${pageId}`;
-      console.log(`Go to Code Page ${pageId} ...`);
-      await page.goto(url);
-      await page.waitForNavigation({ waitUntil: "networkidle0" });
+      const maxRetries = 3;
+      let attempt = 0;
+      let success = false;
+
+      while (attempt < maxRetries && !success) {
+        try {
+          attempt++;
+          if (attempt === 1) {
+            console.log(chalk.bold.whiteBright(`Go to code-page ${pageId}`));
+          } else {
+            console.log(
+              chalk.bold.whiteBright(
+                `Attempt ${attempt}: Go to code-page ${pageId}`
+              )
+            );
+          }
+
+          console.log(chalk.blue(`Navigating to ${url}`));
+          await page.goto(url, { timeout: 30000 }); // 30 seconds timeout
+          await page.waitForSelector("#pagetext", { timeout: 30000 }); // Wait for the element where the code goes
+
+          // Check if the page loaded correctly
+          const pageTitle = await page.title();
+
+          console.log(chalk.bold.whiteBright(`Opened code-page ${pageId}`));
+          success = true;
+        } catch (error) {
+          console.error(
+            chalk.yellow(
+              `Attempt ${attempt}: Failed to navigate to code-page ${pageId}`
+            )
+          );
+
+          const enableErrorDetails = false; // Set to true to display error details
+
+          if (attempt >= maxRetries) {
+            console.error(chalk.bold.bgRed("Max retries reached."));
+            console.error(chalk.bold.red(`${url}`));
+            if (enableErrorDetails) {
+              console.error(error);
+            }
+            return;
+          }
+
+          // Add a delay before retrying
+          await new Promise((resolve) => setTimeout(resolve, 5000));
+        }
+      }
 
       // Update the code page content
       await page.evaluate((codeContent) => {
@@ -83,9 +160,9 @@ const updateCodePage = async () => {
 
       // Save the changes
       await page.click("#btnSaveDone");
-      console.log(`Updating Code Page ${pageId} ...`);
+      console.log(chalk.bold.white(`Updating code-page ${pageId} ...`));
       await page.waitForNavigation();
-      console.log(`Saved Code Page ${pageId}`);
+      console.log(chalk.bold.bgGreen(`Successfully saved code-page ${pageId}`));
     };
 
     // Update JavaScript code page
