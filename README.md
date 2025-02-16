@@ -2,23 +2,7 @@
 
 This is a TypeScript React App using the [QuickBase RESTful JSON API](https://developer.quickbase.com/) with [tflanagan/node-quickbase](https://github.com/tflanagan/node-quickbase).
 
-The development environment uses a user token.
-
-```bash
-npm run dev
-```
-
-In production individual temporary token's are generated.
-
-```bash
-npm run build
-```
-
-This is a work in progress.
-
-</br>
-
-## Follow these steps to link your code pages together.
+## Install.
 
 Navigate to the Pages section in your app. This is the page the lists all your code pages. In my builder account it looks something like this, but will likely be different for you.
 
@@ -87,3 +71,25 @@ Here is a full page HTML example.
   </body>
 </html>
 ```
+
+## Development
+
+The development environment uses a user token.
+
+```bash
+npm run dev
+```
+
+In production individual temporary token's are generated.
+
+```bash
+npm run build
+```
+
+Set up .env to update code pages from the command line
+
+```bash
+npm run quickbase
+```
+
+work in progress.
