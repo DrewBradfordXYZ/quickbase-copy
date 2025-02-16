@@ -22,11 +22,28 @@ const getAllFiles = (extension) => {
   return filteredFiles.map((file) => path.join(assetsDir, file));
 };
 
-async function takeScreenshot(page, filename) {
+const takeScreenshot = async (page, filename) => {
   const screenshotPath = path.join(__dirname, filename);
   await page.screenshot({ path: screenshotPath });
   console.log(`Screenshot saved to ${screenshotPath}`);
-}
+};
+
+const logNavigationAttempt = (attempt, url) => {
+  const message =
+    attempt === 1
+      ? `${chalk.bold.whiteBright("Navigating to")} ${chalk.blue(url)}`
+      : chalk.bold.whiteBright(
+          `Attempt ${attempt}: Navigating to ${chalk.blue(url)}`
+        );
+  console.log(message);
+};
+
+const extractPageName = async (page) => {
+  return await page.evaluate(() => {
+    const nameInput = document.querySelector('input[name="name"]');
+    return nameInput ? nameInput.value : "Unknown";
+  });
+};
 
 const updateCodePage = async () => {
   const quickbaseUrl = process.env.QUICKBASE_LOGIN_URL;
@@ -100,31 +117,18 @@ const updateCodePage = async () => {
       const maxRetries = 3;
       let attempt = 0;
       let success = false;
-      let pageName = "Unknown"; // Initialize pageName
+      let codePageName = "Unknown"; // Initialize pageName
 
       while (attempt < maxRetries && !success) {
         try {
           attempt++;
-          if (attempt === 1) {
-            console.log(
-              `${chalk.bold.whiteBright("Navigating to")} ${chalk.blue(url)}`
-            );
-          } else {
-            console.log(
-              chalk.bold.whiteBright(
-                `Attempt ${attempt}: Navigating to ${chalk.blue(url)}`
-              )
-            );
-          }
+          logNavigationAttempt(attempt, url);
 
           await page.goto(url, { timeout: 30000 }); // 30 seconds timeout
           await page.waitForSelector("#pagetext", { timeout: 30000 }); // Wait for the element where the code goes
 
           // Extract the value of the name field
-          pageName = await page.evaluate(() => {
-            const nameInput = document.querySelector('input[name="name"]');
-            return nameInput ? nameInput.value : "Unknown";
-          });
+          codePageName = await extractPageName(page);
 
           console.log(
             `${chalk.bold.whiteBright(`Opened code-page-${pageId}`)}`
@@ -133,7 +137,7 @@ const updateCodePage = async () => {
         } catch (error) {
           console.error(
             chalk.yellow(
-              `Attempt ${attempt}: Failed to navigate to code-page ${pageId}`
+              `Attempt ${attempt}: Failed to navigate to code-page-${pageId}`
             )
           );
 
@@ -165,7 +169,7 @@ const updateCodePage = async () => {
       await page.click("#btnSaveDone");
       console.log(
         `${chalk.bold.whiteBright("Updating")} ${chalk.hex("#FFA500")(
-          `${pageName}`
+          `${codePageName}`
         )} ${chalk.bold.whiteBright("with")} ${chalk.hex("#FFA500")(
           path.basename(filePath)
         )}`
@@ -193,6 +197,19 @@ const updateCodePage = async () => {
     // Set to true to test screenshot capture
     if (false) {
       throw new Error("Intentional error for testing screenshot capture.");
+    }
+
+    // Delete the screenshot file after successful execution
+    const screenshotPath = path.join(
+      __dirname,
+      "screenshots-puppeteer",
+      "error_codepage_screenshot.png"
+    );
+    if (fs.existsSync(screenshotPath)) {
+      fs.unlinkSync(screenshotPath);
+      console.log(
+        "Script ran without errors, screenshot error file deleted successfully."
+      );
     }
   } catch (error) {
     console.error("Something went wrong, check the screenshot", error);
