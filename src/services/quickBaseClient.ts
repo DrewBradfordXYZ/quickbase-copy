@@ -13,7 +13,7 @@ const getTokenFromSession = (dbid: string): string | null => {
   if (tokenData) {
     const { token, expirationTime } = JSON.parse(tokenData);
     if (Date.now() < expirationTime) {
-      console.log("Retrieved temp token:", token);
+      // console.log("Retrieved temp token:", token);
       return token;
     } else {
       sessionStorage.removeItem(`tempToken_${dbid}`);
@@ -32,7 +32,7 @@ const generateTempToken = async (dbid: string): Promise<string> => {
       dbid: dbid,
     });
     const token = response.temporaryAuthorization;
-    console.log("Generated temp token:", token);
+    // console.log("Generated temp token:", token);
     storeTokenInSession(dbid, token);
     return token;
   } catch (error) {

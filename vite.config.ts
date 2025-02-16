@@ -10,6 +10,7 @@ export default defineConfig({
   },
   build: {
     sourcemap: false,
+    chunkSizeWarningLimit: 1024, // Code pages can not excede 1 MB
     rollupOptions: {
       output: {
         sourcemapExcludeSources: true, // exclude node_modules sources from sourcemap
