@@ -30,7 +30,7 @@ These are the three things to look out for that will be unique to you.
 
 </br>
 
-CSS goes in the head tag. Name your code page with a .css extention.
+CSS goes in the head tag. Name your code-page with a .css extention.
 
 ```html
 <link
@@ -39,13 +39,13 @@ CSS goes in the head tag. Name your code page with a .css extention.
 />
 ```
 
-JS goes at the bottom of the body tag. Name your code page with a .js extention.
+JS goes at the bottom of the body tag. Name your code-page with a .js extention.
 
 ```html
 <script src="https://builderprogram-USERNAME.quickbase.com/nav/app/APPDBID/action/AppDBPages?a=dbpage&pageID=PAGEID"></script>
 ```
 
-Here is a full page HTML example.
+Here is a full page HTML code-page example. Set this up once and link your .js and .css code-pages. Updating the .js and .css files will update your app.
 
 ```html
 <!DOCTYPE html>
