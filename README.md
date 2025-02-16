@@ -22,11 +22,11 @@ Put together it looks like this.
 https://builderprogram-USERNAME.quickbase.com/nav/app/APPDBID/action/AppDBPages?a=dbpage&pageID=PAGEID
 ```
 
-These are the three things to look out for that will be unique to you.
+These will be unique to your setup.
 
-1. The base URL
-2. APPDBID
-3. PAGEID
+- The base URL
+- APPDBID
+- PAGEID
 
 </br>
 
