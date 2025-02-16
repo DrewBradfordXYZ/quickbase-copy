@@ -10,18 +10,16 @@ dotenv.config();
 const __filename = fileURLToPath(import.meta.url); // this line is needed to get the absolute path of the current file in an ES6 module,
 const __dirname = path.dirname(__filename);
 
-const getLatestIndexFile = (extension) => {
+const getAllFiles = (extension) => {
   const assetsDir = path.resolve(__dirname, "../dist/assets");
   const files = fs.readdirSync(assetsDir);
-  const indexFile = files.find(
-    (file) => file.startsWith("index-") && file.endsWith(extension)
-  );
-  if (!indexFile) {
+  const filteredFiles = files.filter((file) => file.endsWith(extension));
+  if (filteredFiles.length === 0) {
     throw new Error(
-      `Index file not found in dist/assets directory with extension ${extension}`
+      `No files found in dist/assets directory with extension ${extension}`
     );
   }
-  return path.join(assetsDir, indexFile);
+  return filteredFiles.map((file) => path.join(assetsDir, file));
 };
 
 async function takeScreenshot(page, filename) {
@@ -35,13 +33,11 @@ const updateCodePage = async () => {
   const quickbasePagePath = process.env.QUICKBASE_PAGE_URL;
   const username = process.env.QUICKBASE_USERNAME;
   const password = process.env.QUICKBASE_PASSWORD;
-  const jsPageId = process.env.QUICKBASE_JS_PAGE_ID;
-  const cssPageId = process.env.QUICKBASE_CSS_PAGE_ID;
+  const jsPageIds = process.env.QUICKBASE_JS_PAGE_IDS.split(",");
+  const cssPageIds = process.env.QUICKBASE_CSS_PAGE_IDS.split(",");
 
-  const jsFilePath = getLatestIndexFile(".js");
-  const cssFilePath = getLatestIndexFile(".css");
-  const jsCodeContent = fs.readFileSync(jsFilePath, "utf8");
-  const cssCodeContent = fs.readFileSync(cssFilePath, "utf8");
+  const jsFiles = getAllFiles(".js");
+  const cssFiles = getAllFiles(".css");
 
   // --no-sandbox is required when running Puppeteer on a Linux server
   const browser = await puppeteer.launch({
@@ -99,33 +95,40 @@ const updateCodePage = async () => {
     }
 
     // Function to update code page content
-    const updatePageContent = async (pageId, codeContent) => {
+    const updatePageContent = async (pageId, codeContent, filePath) => {
       const url = `${quickbasePagePath}${pageId}`;
       const maxRetries = 3;
       let attempt = 0;
       let success = false;
+      let pageName = "Unknown"; // Initialize pageName
 
       while (attempt < maxRetries && !success) {
         try {
           attempt++;
           if (attempt === 1) {
-            console.log(chalk.bold.whiteBright(`Go to code-page ${pageId}`));
+            console.log(
+              `${chalk.bold.whiteBright("Navigating to")} ${chalk.blue(url)}`
+            );
           } else {
             console.log(
               chalk.bold.whiteBright(
-                `Attempt ${attempt}: Go to code-page ${pageId}`
+                `Attempt ${attempt}: Navigating to ${chalk.blue(url)}`
               )
             );
           }
 
-          console.log(chalk.blue(`Navigating to ${url}`));
           await page.goto(url, { timeout: 30000 }); // 30 seconds timeout
           await page.waitForSelector("#pagetext", { timeout: 30000 }); // Wait for the element where the code goes
 
-          // Check if the page loaded correctly
-          const pageTitle = await page.title();
+          // Extract the value of the name field
+          pageName = await page.evaluate(() => {
+            const nameInput = document.querySelector('input[name="name"]');
+            return nameInput ? nameInput.value : "Unknown";
+          });
 
-          console.log(chalk.bold.whiteBright(`Opened code-page ${pageId}`));
+          console.log(
+            `${chalk.bold.whiteBright(`Opened code-page-${pageId}`)}`
+          );
           success = true;
         } catch (error) {
           console.error(
@@ -160,16 +163,32 @@ const updateCodePage = async () => {
 
       // Save the changes
       await page.click("#btnSaveDone");
-      console.log(chalk.bold.white(`Updating code-page ${pageId} ...`));
+      console.log(
+        `${chalk.bold.whiteBright("Updating")} ${chalk.hex("#FFA500")(
+          `${pageName}`
+        )} ${chalk.bold.whiteBright("with")} ${chalk.hex("#FFA500")(
+          path.basename(filePath)
+        )}`
+      );
       await page.waitForNavigation();
-      console.log(chalk.bold.bgGreen(`Successfully saved code-page ${pageId}`));
+      console.log(chalk.bold.bgGreen(`Successfully Saved`));
     };
 
-    // Update JavaScript code page
-    await updatePageContent(jsPageId, jsCodeContent);
+    // Update JavaScript code pages
+    for (let i = 0; i < jsFiles.length; i++) {
+      const jsFilePath = jsFiles[i];
+      const jsCodeContent = fs.readFileSync(jsFilePath, "utf8");
+      const jsPageId = jsPageIds[i];
+      await updatePageContent(jsPageId, jsCodeContent, jsFilePath);
+    }
 
-    // Update CSS code page
-    await updatePageContent(cssPageId, cssCodeContent);
+    // Update CSS code pages
+    for (let i = 0; i < cssFiles.length; i++) {
+      const cssFilePath = cssFiles[i];
+      const cssCodeContent = fs.readFileSync(cssFilePath, "utf8");
+      const cssPageId = cssPageIds[i];
+      await updatePageContent(cssPageId, cssCodeContent, cssFilePath);
+    }
 
     // Set to true to test screenshot capture
     if (false) {
