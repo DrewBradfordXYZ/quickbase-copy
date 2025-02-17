@@ -47,7 +47,7 @@ const extractPageName = async (page) => {
 
 const updateCodePage = async () => {
   const quickbaseUrl = process.env.QUICKBASE_LOGIN_URL;
-  const quickbasePagePath = process.env.QUICKBASE_PAGE_URL;
+  const quickbasePagePath = process.env.QUICKBASE_PAGE_EDIT_URL;
   const username = process.env.QUICKBASE_USERNAME;
   const password = process.env.QUICKBASE_PASSWORD;
   const jsPageIds = process.env.QUICKBASE_JS_PAGE_IDS.split(",");

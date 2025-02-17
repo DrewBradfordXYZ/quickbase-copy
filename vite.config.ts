@@ -1,10 +1,11 @@
 import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
+import generateHtmlPlugin from "./scripts/vite-plugin-generate-html";
 
 // https://vite.dev/config/
 export default defineConfig({
-  plugins: [react(), tailwindcss()],
+  plugins: [react(), tailwindcss(), generateHtmlPlugin()],
   define: {
     "process.env": process.env,
   },

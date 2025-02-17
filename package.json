@@ -5,10 +5,11 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "build": "tsc -b && vite build",
+    "build": "tsc -b && vite build && npm run move-index",
     "lint": "eslint .",
     "preview": "vite preview",
-    "quickbase": "node scripts/updateCodePage.js"
+    "quickbase": "node scripts/updateCodePage.js",
+    "move-index": "mkdir -p dist/unused && mv dist/index.html dist/unused/index.html"
   },
   "dependencies": {
     "@tailwindcss/vite": "^4.0.6",
