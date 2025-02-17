@@ -11,40 +11,63 @@ function generateHtmlPlugin(): Plugin {
     closeBundle() {
       const cssPageIds = process.env.QUICKBASE_CSS_PAGE_IDS
         ? process.env.QUICKBASE_CSS_PAGE_IDS.split(",")
-        : ["<-MissingCSSPageId->"];
+        : ["<-QUICKBASE-CSS-PAGE-IDS->"];
       const jsPageIds = process.env.QUICKBASE_JS_PAGE_IDS
         ? process.env.QUICKBASE_JS_PAGE_IDS.split(",")
-        : ["<-MissingJSPageId->"];
+        : ["<-QUICKBASE-JS-PAGE-IDS->"];
       const quickbasePagesUrl =
-        process.env.QUICKBASE_PAGES_URL ||
-        "<-MissingUrlOfThePageThatListsAllCodepages->";
+        process.env.QUICKBASE_PAGES_URL || "<-QUICKBASE-PAGES-URL->";
 
       const cssLinks = cssPageIds
         .map(
-          (id) =>
-            `  <link href="${quickbasePagesUrl}?a=dbpage&pageID=${id.trim()}" rel="stylesheet">`
+          (id, index) =>
+            `${
+              index === 0 ? "" : "  "
+            }\t<link href="${quickbasePagesUrl}?a=dbpage&pageID=${id.trim()}" rel="stylesheet">`
         )
         .join("\n");
 
       const jsScripts = jsPageIds
         .map(
-          (id) =>
-            `  <script src="${quickbasePagesUrl}?a=dbpage&pageID=${id.trim()}"></script>`
+          (id, index) =>
+            `${
+              index === 0 ? "" : "  "
+            }\t<script src="${quickbasePagesUrl}?a=dbpage&pageID=${id.trim()}"></script>`
         )
         .join("\n");
 
-      const comments = process.env.QUICKBASE_PAGES_URL
+      const commentsPageUrl = process.env.QUICKBASE_PAGES_URL
         ? ""
-        : "  <!--Update manually or update QUICKBASE_PAGES_URL in the .env file  -->\n";
+        : "    <!-- Update QUICKBASE_PAGES_URL in the .env file. -->";
 
-      const htmlContent = `
+      const commentsCssPageIds = process.env.QUICKBASE_CSS_PAGE_IDS
+        ? ""
+        : "    <!-- Update QUICKBASE_CSS_PAGE_IDS in the .env file. -->";
+
+      const commentsJsPageIds = process.env.QUICKBASE_JS_PAGE_IDS
+        ? ""
+        : "    <!-- Update QUICKBASE_JS_PAGE_IDS in the .env file. -->";
+
+      let commentsEnvRename = "";
+      if (commentsPageUrl && commentsCssPageIds && commentsJsPageIds) {
+        commentsEnvRename =
+          "    <!-- Make sure to rename the .env.example file to .env -->";
+      }
+
+      let htmlContent = `
 <!doctype html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>QuickBase Copy</title>
-${comments}${cssLinks}
+  <title>QuickBase Copy</title>`;
+
+      if (commentsEnvRename) htmlContent += `\n${commentsEnvRename}`;
+      if (commentsPageUrl) htmlContent += `\n${commentsPageUrl}`;
+      if (commentsCssPageIds) htmlContent += `\n${commentsCssPageIds}`;
+
+      htmlContent += `
+  ${cssLinks}
 </head>
 <body>
   <noscript>
@@ -53,15 +76,21 @@ ${comments}${cssLinks}
     JavaScript enabled. Please enable it to continue.
     </strong>
   </noscript>
-  <div id="root"></div>
-${comments}${jsScripts}
-</body>
-</html>
-      `;
+  <div id="root"></div>`;
 
+      if (commentsPageUrl) htmlContent += `\n${commentsPageUrl}`;
+      if (commentsJsPageIds) htmlContent += `\n${commentsJsPageIds}`;
+
+      htmlContent += `
+  ${jsScripts}
+</body>
+</html>`;
+
+      // Writing to file
       fs.writeFileSync(
-        path.resolve(__dirname, "../dist/quickbase-copy.html"),
-        htmlContent.trim()
+        path.join(__dirname, "../dist/quickbase-copy.html"),
+        htmlContent,
+        "utf8"
       );
     },
   };
