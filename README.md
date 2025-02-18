@@ -1,6 +1,19 @@
-# A QuickBase Copy Feature
+# QuickBase Copy Feature
 
 This is a TypeScript React App using the [QuickBase RESTful JSON API](https://developer.quickbase.com/) with [tflanagan/node-quickbase](https://github.com/tflanagan/node-quickbase).
+
+## Description
+
+QuickBase Copy Feature is a tool designed to automate the process of copying code pages in a QuickBase application. It uses Puppeteer to interact with QuickBase and update code pages with the latest build files.
+
+Temporary authentication tokens give access to the QuickBase RESTful JSON API in production and a User Token is used in the development enviornment. API requests have been tested and work in both cases.
+
+This project is under development and its intended purpose will evolve.
+
+## Prerequisites
+
+- Node.js version 14.x or higher
+- A QuickBase account with the necessary permissions
 
 ## Install
 
@@ -17,7 +30,7 @@ Install dependencies
 npm install # create a node_modules folder
 ```
 
-Rename the enviornment files
+Rename the environment files
 
 ```bash
 mv .env.example .env
@@ -31,21 +44,11 @@ Create 3 code pages in your QuickBase App while noting their PageID
 - quickbase-copy.js
 - quickbase-copy.css
 
-Update and follow the directions in the three enviornment variable files.
+## Configuration
 
-- .env.development
-- .env.production
-- .env
+Update the `.env`, `.env.development`, and `.env.production` files with your QuickBase credentials and other necessary information.
 
-## Node Version
-
-This project requires Node.js version 14.x or higher. You can check your Node.js version with:
-
-```bash
-node -v
-```
-
-## Development
+## Usage
 
 To start the development server, use:
 
@@ -53,31 +56,22 @@ To start the development server, use:
 npm run dev
 ```
 
-Build the production files.
+To build the production files, use:
 
 ```bash
 npm run build
-
-# Open /dist/quickbase-copy.html
-# If there are comments in the html file, update the .env variables and rerun the command.
-# If you choose to not update .env, follow the directions in the html file
-# to update the css and js links manually.
 ```
 
-Update the QuickBase code pages
+To update the QuickBase code pages automatically, use:
 
 ```bash
-# This step is optional,
-# If you choose to not update .env do not run this command.
-# You may update code pages manually with the files in /dist.
-
-# To update code pages automatically:
 npm run quickbase
-
-# Your code pages are now updated with app content
-# Your app is in production.
 ```
 
-Create a button to launch quickbase-copy.html
+## Contributing
 
-work in progress.
+If you would like to contribute to this project, please fork the repository and submit a pull request.
+
+## License
+
+This project is licensed under the MIT License.
