@@ -46,8 +46,9 @@ npm run dev
 Build the production files.
 
 ```bash
-npm run build # Open /dist/quickbase-copy.html
+npm run build
 
+# Open /dist/quickbase-copy.html
 # If there are comments in the html file, update the .env variables and rerun the command.
 ```
 
