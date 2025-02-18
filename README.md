@@ -7,7 +7,7 @@ This is a TypeScript React App using the [QuickBase RESTful JSON API](https://de
 Download this repository
 
 ```bash
-git clone https://github.com/your-username/quickbase-copy.git
+git clone https://github.com/DrewBradfordXYZ/quickbase-copy.git
 cd quickbase-copy
 ```
 
