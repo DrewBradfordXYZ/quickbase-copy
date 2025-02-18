@@ -59,12 +59,14 @@ npm run dev
 To build the production files, use:
 
 ```bash
+# This will build a custom HTML file in /dist that links css and js code pages.
 npm run build
 ```
 
 To update the QuickBase code pages automatically, use:
 
 ```bash
+# .env variables are a prerequisite
 npm run quickbase
 ```
 
