@@ -37,7 +37,17 @@ Update and follow the directions in the three enviornment variable files.
 - .env.production
 - .env
 
-Run the development environment and see how it looks.
+## Node Version
+
+This project requires Node.js version 14.x or higher. You can check your Node.js version with:
+
+```bash
+node -v
+```
+
+## Development
+
+To start the development server, use:
 
 ```bash
 npm run dev
@@ -61,7 +71,7 @@ Update the QuickBase code pages
 # If you choose to not update .env do not run this command.
 # You may update code pages manually with the files in /dist.
 
-# To automatically update code pages,
+# To update code pages automatically:
 npm run quickbase
 
 # Your code pages are now updated with app content
