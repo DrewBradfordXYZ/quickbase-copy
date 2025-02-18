@@ -180,8 +180,8 @@ const updateCodePage = async () => {
       console.log(chalk.bold.bgGreen(`Successfully Saved`));
     };
 
-    // Update HTML code page
-    if (htmlFiles.length > 0) {
+    // Update HTML code page if htmlPageId is not empty
+    if (htmlPageId && htmlFiles.length > 0) {
       const htmlFilePath = htmlFiles[0];
       const htmlCodeContent = fs.readFileSync(htmlFilePath, "utf8");
       await updatePageContent(htmlPageId, htmlCodeContent, htmlFilePath);
