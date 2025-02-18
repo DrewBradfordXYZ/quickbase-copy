@@ -5,6 +5,13 @@ import { Plugin } from "vite";
 
 dotenv.config();
 
+// This plugin generates the QuickBase HTML code page.
+// It generates the CSS and JS links that reference other
+// code pages based on environment variables.
+
+// If the environment variables are not set,
+// it will add comments in the HTML file.
+
 function generateHtmlPlugin(): Plugin {
   return {
     name: "generate-html-codepage",
