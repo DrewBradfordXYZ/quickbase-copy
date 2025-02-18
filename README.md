@@ -43,12 +43,12 @@ Run the development environment and see how it looks.
 npm run dev
 ```
 
-Build the production files. Check the /dist/quickbase-copy.html
-
-If there are comments in the html file, update the .env variables and rerun the command.
+Build the production files.
 
 ```bash
-npm run build
+npm run build # Open /dist/quickbase-copy.html
+
+# If there are comments in the html file, update the .env variables and rerun the command.
 ```
 
 Update the QuickBase code pages
