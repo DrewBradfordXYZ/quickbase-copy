@@ -61,10 +61,11 @@ Update the QuickBase code pages
 # If you choose to not update .env do not run this command.
 # You may update code pages manually with the files in /dist.
 
+# To automatically update code pages,
 npm run quickbase
 
-# If you recieve success messages, your code pages are now updated with app content
-# Your app is now in production.
+# Your code pages are now updated with app content
+# Your app is in production.
 ```
 
 Create a button to launch quickbase-copy.html
