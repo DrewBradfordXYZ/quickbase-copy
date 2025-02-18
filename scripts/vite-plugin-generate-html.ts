@@ -1,5 +1,6 @@
 import fs from "fs";
 import path from "path";
+import { findUp } from "find-up";
 import dotenv from "dotenv";
 import { Plugin } from "vite";
 
@@ -93,12 +94,19 @@ function generateHtmlPlugin(): Plugin {
 </body>
 </html>`;
 
-      // Writing to file
-      fs.writeFileSync(
-        path.join(__dirname, "../dist/quickbase-copy.html"),
-        htmlContent,
-        "utf8"
-      );
+      // Get the root project name
+      findUp(".git", { type: "directory" }).then((gitRootPath) => {
+        const rootFolderName = gitRootPath
+          ? path.basename(path.dirname(gitRootPath))
+          : "codepage"; // if git is not found, use codepage as the default name
+
+        // Writing to file
+        fs.writeFileSync(
+          path.join(__dirname, `../dist/${rootFolderName}.html`),
+          htmlContent,
+          "utf8"
+        );
+      });
     },
   };
 }
