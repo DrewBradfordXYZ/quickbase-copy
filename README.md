@@ -50,7 +50,8 @@ npm run build
 
 # Open /dist/quickbase-copy.html
 # If there are comments in the html file, update the .env variables and rerun the command.
-# If you choose to not update .env, follow the directions in the html file to update the css and js links manually.
+# If you choose to not update .env, follow the directions in the html file
+# to update the css and js links manually.
 ```
 
 Update the QuickBase code pages
