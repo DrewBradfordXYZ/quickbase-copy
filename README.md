@@ -1,10 +1,10 @@
-# QuickBase Copy Feature
+# QuickBase Copy
 
 This is a TypeScript React App using the [QuickBase RESTful JSON API](https://developer.quickbase.com/) with [tflanagan/node-quickbase](https://github.com/tflanagan/node-quickbase).
 
 ## Description
 
-QuickBase Copy Feature is a tool designed to automate the process of copying code pages in a QuickBase application. It uses Puppeteer to interact with QuickBase and update code pages with the latest build files.
+A tool designed to automate the process of copying code pages in a QuickBase application. It uses Puppeteer to interact with QuickBase and update code pages with the latest build files.
 
 Temporary authentication tokens give access to the QuickBase RESTful JSON API in production and a User Token is used in the development enviornment. API requests have been tested and work in both cases.
 
