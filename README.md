@@ -2,94 +2,64 @@
 
 This is a TypeScript React App using the [QuickBase RESTful JSON API](https://developer.quickbase.com/) with [tflanagan/node-quickbase](https://github.com/tflanagan/node-quickbase).
 
-## Install.
+## Install
 
-Navigate to the Pages section in your app. This is the page the lists all your code pages. In my builder account it looks something like this, but will likely be different for you.
+Download this repository
 
-```
-https://builderprogram-USERNAME.quickbase.com/nav/app/APPDBID/action/AppDBPages
-```
-
-Add this to the end.
-
-```
-?a=dbpage&pageID=PAGEID
+```bash
+git clone https://github.com/your-username/quickbase-copy.git
+cd quickbase-copy
 ```
 
-Put together it looks like this.
+Install dependencies
 
-```
-https://builderprogram-USERNAME.quickbase.com/nav/app/APPDBID/action/AppDBPages?a=dbpage&pageID=PAGEID
-```
-
-These will be unique to your setup.
-
-- The base URL
-- APPDBID
-- PAGEID
-
-</br>
-
-CSS goes in the head tag. Name your code-page with a .css extention.
-
-```html
-<link
-  href="https://builderprogram-USERNAME.quickbase.com/nav/app/APPDBID/action/AppDBPages?a=dbpage&pageID=PAGEID"
-  rel="stylesheet"
-/>
+```bash
+npm install # create a node_modules folder
 ```
 
-JS goes at the bottom of the body tag. Name your code-page with a .js extention.
+Rename the enviornment files
 
-```html
-<script src="https://builderprogram-USERNAME.quickbase.com/nav/app/APPDBID/action/AppDBPages?a=dbpage&pageID=PAGEID"></script>
+```bash
+mv .env.example .env
+mv .env.example.development .env.development
+mv .env.example.production .env.production
 ```
 
-Here is a full page HTML code-page example. Set this up once and link your .js and .css code-pages. Updating the .js and .css files will update your app.
+Create 3 code pages in your QuickBase App while noting their PageID
 
-```html
-<!DOCTYPE html>
-<html lang="en">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Your Page Title</title>
-    <link
-      href="https://builderprogram-USERNAME.quickbase.com/nav/app/APPDBID/action/AppDBPages?a=dbpage&pageID=PAGEID"
-      rel="stylesheet"
-    />
-  </head>
-  <body>
-    <noscript>
-      <strong>
-        We're sorry but this app doesn't work properly without JavaScript
-        enabled. Please enable it to continue.
-      </strong>
-    </noscript>
-    <div id="root"></div>
-    <script src="https://builderprogram-USERNAME.quickbase.com/nav/app/APPDBID/action/AppDBPages?a=dbpage&pageID=PAGEID"></script>
-  </body>
-</html>
-```
+- quickbase-copy.html
+- quickbase-copy.js
+- quickbase-copy.css
 
-## Development
+Update and follow the directions in the three enviornment variable files.
 
-The development environment uses a user token.
+- .env.development
+- .env.production
+- .env
+
+Run the development environment and see how it looks.
 
 ```bash
 npm run dev
 ```
 
-In production individual temporary token's are generated.
+Build the production files. Check the /dist/quickbase-copy.html
+If there are comments, update the .env variables.
+and rerun the command.
 
 ```bash
 npm run build
 ```
 
-Set up .env to update code pages from the command line
+Update the QuickBase code pages
 
 ```bash
 npm run quickbase
+
+# If you recieve a success message and files line up your app is now in production.
+# If you desire, check your code pages to see their content has been updated.
 ```
+
+Create a button to launch quickbase-copy.html
 
 work in progress.
