@@ -60,7 +60,8 @@ To build the production files, use:
 
 ```bash
 npm run build
-# Inspect /dist/quickbase-copy.html. If variables are not set there will be comments.
+# Inspect /dist/quickbase-copy.html.
+# If .env is missing information there will be comments.
 ```
 
 To update the QuickBase code pages automatically, use:
