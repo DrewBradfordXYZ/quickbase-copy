@@ -10,13 +10,13 @@ dotenv.config();
 const __filename = fileURLToPath(import.meta.url); // this line is needed to get the absolute path of the current file in an ES6 module,
 const __dirname = path.dirname(__filename);
 
-const getAllFiles = (extension) => {
-  const assetsDir = path.resolve(__dirname, "../dist/assets");
+const getAllFiles = (extension, directory = "assets") => {
+  const assetsDir = path.resolve(__dirname, `../dist/${directory}`);
   const files = fs.readdirSync(assetsDir);
   const filteredFiles = files.filter((file) => file.endsWith(extension));
   if (filteredFiles.length === 0) {
     throw new Error(
-      `No files found in dist/assets directory with extension ${extension}`
+      `No files found in dist/${directory} directory with extension ${extension}`
     );
   }
   return filteredFiles.map((file) => path.join(assetsDir, file));
@@ -47,14 +47,16 @@ const extractPageName = async (page) => {
 
 const updateCodePage = async () => {
   const quickbaseUrl = process.env.QUICKBASE_LOGIN_URL;
-  const quickbasePagePath = process.env.QUICKBASE_PAGE_EDIT_URL;
+  const quickbasePagePath = process.env.QUICKBASE_CODEPAGE_EDIT_URL;
   const username = process.env.QUICKBASE_USERNAME;
   const password = process.env.QUICKBASE_PASSWORD;
-  const jsPageIds = process.env.QUICKBASE_JS_PAGE_IDS.split(",");
-  const cssPageIds = process.env.QUICKBASE_CSS_PAGE_IDS.split(",");
+  const htmlPageId = process.env.QUICKBASE_CODEPAGE_HTML_ID;
+  const jsPageIds = process.env.QUICKBASE_CODEPAGE_JS_IDS.split(",");
+  const cssPageIds = process.env.QUICKBASE_CODEPAGE_CSS_IDS.split(",");
 
   const jsFiles = getAllFiles(".js");
   const cssFiles = getAllFiles(".css");
+  const htmlFiles = getAllFiles(".html", ""); // Specify the root dist directory for HTML files
 
   // --no-sandbox is required when running Puppeteer on a Linux server
   const browser = await puppeteer.launch({
@@ -177,6 +179,13 @@ const updateCodePage = async () => {
       await page.waitForNavigation();
       console.log(chalk.bold.bgGreen(`Successfully Saved`));
     };
+
+    // Update HTML code page
+    if (htmlFiles.length > 0) {
+      const htmlFilePath = htmlFiles[0];
+      const htmlCodeContent = fs.readFileSync(htmlFilePath, "utf8");
+      await updatePageContent(htmlPageId, htmlCodeContent, htmlFilePath);
+    }
 
     // Update JavaScript code pages
     for (let i = 0; i < jsFiles.length; i++) {

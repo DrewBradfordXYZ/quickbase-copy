@@ -9,14 +9,14 @@ function generateHtmlPlugin(): Plugin {
   return {
     name: "generate-html-codepage",
     closeBundle() {
-      const cssPageIds = process.env.QUICKBASE_CSS_PAGE_IDS
-        ? process.env.QUICKBASE_CSS_PAGE_IDS.split(",")
-        : ["<-QUICKBASE-CSS-PAGE-IDS->"];
-      const jsPageIds = process.env.QUICKBASE_JS_PAGE_IDS
-        ? process.env.QUICKBASE_JS_PAGE_IDS.split(",")
-        : ["<-QUICKBASE-JS-PAGE-IDS->"];
+      const cssPageIds = process.env.QUICKBASE_CODEPAGE_CSS_IDS
+        ? process.env.QUICKBASE_CODEPAGE_CSS_IDS.split(",")
+        : ["<-QUICKBASE-CODEPAGE-CSS-IDS->"];
+      const jsPageIds = process.env.QUICKBASE_CODEPAGE_JS_IDS
+        ? process.env.QUICKBASE_CODEPAGE_JS_IDS.split(",")
+        : ["<-QUICKBASE-CODEPAGE-JS-IDS->"];
       const quickbasePagesUrl =
-        process.env.QUICKBASE_PAGES_URL || "<-QUICKBASE-PAGES-URL->";
+        process.env.QUICKBASE_CODEPAGES_URL || "<-QUICKBASE-CODEPAGES-URL->";
 
       const cssLinks = cssPageIds
         .map(
@@ -36,17 +36,17 @@ function generateHtmlPlugin(): Plugin {
         )
         .join("\n");
 
-      const commentsPageUrl = process.env.QUICKBASE_PAGES_URL
+      const commentsPageUrl = process.env.QUICKBASE_CODEPAGES_URL
         ? ""
-        : "    <!-- Update QUICKBASE_PAGES_URL in the .env file. -->";
+        : "    <!-- Update QUICKBASE_CODEPAGES_URL in the .env file. -->";
 
-      const commentsCssPageIds = process.env.QUICKBASE_CSS_PAGE_IDS
+      const commentsCssPageIds = process.env.QUICKBASE_CODEPAGE_CSS_IDS
         ? ""
-        : "    <!-- Update QUICKBASE_CSS_PAGE_IDS in the .env file. -->";
+        : "    <!-- Update QUICKBASE_CODEPAGE_CSS_IDS in the .env file. -->";
 
-      const commentsJsPageIds = process.env.QUICKBASE_JS_PAGE_IDS
+      const commentsJsPageIds = process.env.QUICKBASE_CODEPAGE_JS_IDS
         ? ""
-        : "    <!-- Update QUICKBASE_JS_PAGE_IDS in the .env file. -->";
+        : "    <!-- Update QUICKBASE_CODEPAGE_JS_IDS in the .env file. -->";
 
       let commentsEnvRename = "";
       if (commentsPageUrl && commentsCssPageIds && commentsJsPageIds) {
