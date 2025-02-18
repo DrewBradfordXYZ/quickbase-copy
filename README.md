@@ -56,8 +56,8 @@ Update the QuickBase code pages
 ```bash
 npm run quickbase
 
-# If you recieve a success message and files line up your app is now in production.
-# If you desire, check your code pages to see their content has been updated.
+# If you recieve success messages, your code pages are now updated with app content
+# Your app is now in production.
 ```
 
 Create a button to launch quickbase-copy.html
