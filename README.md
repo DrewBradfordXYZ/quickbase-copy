@@ -55,6 +55,10 @@ npm run build
 Update the QuickBase code pages
 
 ```bash
+# This step is optional,
+# If you choose to not update .env
+# You may update code pages manually with the files in /dist.
+
 npm run quickbase
 
 # If you recieve success messages, your code pages are now updated with app content
