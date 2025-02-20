@@ -1,10 +1,8 @@
 # QuickBase Copy
 
-This is a TypeScript React App using the [QuickBase RESTful JSON API](https://developer.quickbase.com/) with [tflanagan/node-quickbase](https://github.com/tflanagan/node-quickbase).
+This is a TypeScript React App using the [QuickBase RESTful JSON API](https://developer.quickbase.com/) with [tflanagan/node-quickbase](https://github.com/tflanagan/node-quickbase) and [DrewBradfordXYZ/quickbase-codepages](https://github.com/DrewBradfordXYZ/quickbase-codepages).
 
 ## Description
-
-A tool designed to automate the process of copying code pages in a QuickBase application. It uses Puppeteer to interact with QuickBase and update code pages with the latest build files.
 
 Temporary authentication tokens give access to the QuickBase RESTful JSON API in production and a User Token is used in the development enviornment. API requests have been tested and work in both cases.
 
@@ -13,7 +11,7 @@ This project is under development and its intended purpose will evolve.
 ## Prerequisites
 
 - Node.js version 14.x or higher
-- A QuickBase account with the necessary permissions
+- A QuickBase account with the necessary permissions (a free builder account will work)
 
 ## Install
 
