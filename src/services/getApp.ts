@@ -2,7 +2,7 @@ import { QuickBaseResponseGetApp } from "quickbase";
 import { apiRequest } from "./apiRequest";
 
 // Function to fetch app data
-export const appData = async (
+export const getApp = async (
   appId: string
 ): Promise<QuickBaseResponseGetApp> => {
   return apiRequest(appId, async (quickbase) => {

@@ -16,7 +16,6 @@ const FetchTableFields: React.FC<FetchTableFieldsProps> = ({ tableId }) => {
         const results = await getFields(tableId);
         if (Array.isArray(results)) {
           setFields(results);
-          console.log("Fields:", results);
         } else {
           console.error("No data found in results:", results);
           setErrorFields("Failed to fetch table fields");

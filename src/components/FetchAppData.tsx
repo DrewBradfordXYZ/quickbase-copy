@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { appData } from "../services/appData";
+import { getApp } from "../services/getApp";
 
 interface FetchAppDataProps {
   appId: string;
@@ -12,7 +12,7 @@ const FetchAppData: React.FC<FetchAppDataProps> = ({ appId }) => {
   useEffect(() => {
     const fetchAppData = async () => {
       try {
-        const results = await appData(appId);
+        const results = await getApp(appId);
         setAppName(results.name);
       } catch (err) {
         setErrorAppName("Failed to fetch app data");
