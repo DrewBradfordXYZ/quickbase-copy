@@ -1,31 +1,34 @@
 import React, { useEffect, useState } from "react";
-import { tableFields } from "../services/tableFields";
+import { getFields } from "../services/getFields";
 import { QuickBaseResponseGetFields } from "quickbase";
 
 interface FetchTableFieldsProps {
   tableId: string;
-  dbid: string;
 }
 
-const FetchTableFields: React.FC<FetchTableFieldsProps> = ({
-  tableId,
-  dbid,
-}) => {
-  const [fields, setFields] = useState<QuickBaseResponseGetFields>([]);
+const FetchTableFields: React.FC<FetchTableFieldsProps> = ({ tableId }) => {
+  const [fields, setFields] = useState<QuickBaseResponseGetFields | null>(null);
   const [errorFields, setErrorFields] = useState<string | null>(null);
 
   useEffect(() => {
     const fetchTableFields = async () => {
       try {
-        const results = await tableFields(tableId, dbid);
-        setFields(results);
+        const results = await getFields(tableId);
+        if (Array.isArray(results)) {
+          setFields(results);
+          console.log("Fields:", results);
+        } else {
+          console.error("No data found in results:", results);
+          setErrorFields("Failed to fetch table fields");
+        }
       } catch (err) {
+        console.error("Error fetching fields:", err);
         setErrorFields("Failed to fetch table fields");
       }
     };
 
     fetchTableFields();
-  }, [tableId, dbid]);
+  }, [tableId]);
 
   return (
     <div>
@@ -33,7 +36,7 @@ const FetchTableFields: React.FC<FetchTableFieldsProps> = ({
       <p>Table ID: {tableId}</p>
       {errorFields ? (
         <p>{errorFields}</p>
-      ) : fields.length > 0 ? (
+      ) : fields ? (
         <ul>
           {fields.map((field) => (
             <li key={field.id}>{field.label}</li>
