@@ -1,50 +1,16 @@
 import { QuickBaseResponseGetFields } from "quickbase";
-import { AxiosResponse } from "axios";
 import { apiRequest } from "./apiRequest";
 
-// Overload signatures
+// Simplified function
 export async function getFields(
   tableId: string,
-  includeFieldPerms?: boolean,
-  requestOptions?: object,
-  returnAxios?: false | undefined
-): Promise<QuickBaseResponseGetFields>;
-
-export async function getFields(
-  tableId: string,
-  includeFieldPerms?: boolean,
-  requestOptions?: object,
-  returnAxios?: true
-): Promise<AxiosResponse<QuickBaseResponseGetFields>>;
-
-// Implementation
-export async function getFields(
-  tableId: string,
-  includeFieldPerms?: boolean,
-  requestOptions?: object,
-  returnAxios?: boolean
-): Promise<
-  QuickBaseResponseGetFields | AxiosResponse<QuickBaseResponseGetFields>
-> {
-  if (returnAxios === true) {
-    return apiRequest(tableId, async (quickbase) => {
-      const results = await quickbase.getFields({
-        tableId,
-        includeFieldPerms,
-        requestOptions,
-        returnAxios: true,
-      });
-      return results;
+  includeFieldPerms?: boolean
+): Promise<QuickBaseResponseGetFields> {
+  return apiRequest(tableId, async (quickbase) => {
+    const results = await quickbase.getFields({
+      tableId,
+      includeFieldPerms,
     });
-  } else {
-    return apiRequest(tableId, async (quickbase) => {
-      const results = await quickbase.getFields({
-        tableId,
-        includeFieldPerms,
-        requestOptions,
-        returnAxios: undefined,
-      });
-      return results;
-    });
-  }
+    return results;
+  });
 }
