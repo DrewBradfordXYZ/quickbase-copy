@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { getApp } from "../services/getApp";
+// import { getApp } from "../services/getApp";
+import { getApp } from "quickbase-node-api";
 
 interface FetchAppDataProps {
   appId: string;

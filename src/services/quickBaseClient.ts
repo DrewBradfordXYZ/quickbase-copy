@@ -1,4 +1,4 @@
-import { QuickBase } from "quickbase";
+import { QuickBase, QuickBaseOptions } from "quickbase";
 
 // Helper function to store token in sessionStorage
 const storeTokenInSession = (dbid: string, token: string) => {
@@ -68,10 +68,12 @@ export const quickBaseClient = async (dbid: string): Promise<QuickBase> => {
     );
   }
 
-  const quickbase = new QuickBase({
+  const quickbaseOptions: QuickBaseOptions = {
     realm: import.meta.env.VITE_QUICKBASE_REALM,
     [tokenKey]: token,
-  });
+  };
+
+  const quickbase = new QuickBase(quickbaseOptions);
 
   return quickbase;
 };

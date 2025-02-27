@@ -1,17 +1,34 @@
-import React from "react";
-import FetchAppData from "./components/FetchAppData";
-import FetchAppTables from "./components/FetchAppTables";
-import FetchTableFields from "./components/FetchTableFields";
+import React, { useEffect, useState } from "react";
+import { QuickBaseClient } from "quickbase-node-api";
 
 const App: React.FC = (): React.ReactElement => {
-  const appDbid: string = import.meta.env.VITE_QUICKBASE_APP_DBID;
-  const dbid = "buwai2zws";
+  const [appDetails, setAppDetails] = useState<any>(null);
+
+  useEffect(() => {
+    const fetchAppDetails = async () => {
+      const client = await QuickBaseClient.initialize({
+        realm: import.meta.env.VITE_QUICKBASE_REALM,
+        dbid: import.meta.env.VITE_QUICKBASE_APP_DBID,
+        userToken: import.meta.env.VITE_QUICKBASE_USER_TOKEN,
+        mode: import.meta.env.MODE, // or "development" / "production"
+      });
+
+      const details = await client.getApp(
+        import.meta.env.VITE_QUICKBASE_APP_DBID
+      );
+      console.log(details);
+      setAppDetails(details);
+    };
+
+    fetchAppDetails();
+  }, []);
 
   return (
     <>
-      <FetchAppData appId={appDbid} />
-      <FetchAppTables appId={appDbid} />
-      <FetchTableFields tableId={dbid} />
+      {appDetails && <div>App Name: {appDetails.name}</div>}
+      {/* <FetchAppData appId={appDbid} /> */}
+      {/* <FetchAppTables appId={appDbid} /> */}
+      {/* <FetchTableFields tableId={dbid} /> */}
     </>
   );
 };
