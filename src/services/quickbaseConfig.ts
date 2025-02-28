@@ -20,9 +20,9 @@ export const initializeQuickBaseManager = (
     if (logTokens) {
       console.log("Initializing QuickBase manager");
       console.log(`Mode: ${import.meta.env.MODE}`);
-      console.log(`Realm: ${realm}`);
       console.log(`User Token: ${userToken ? "Set" : "Not set"}`);
       console.log(`App Token: ${appToken ? "Set" : "Not set"}`);
+      console.log(`Realm: ${realm}`);
     }
 
     const qbOptions: QuickBaseOptions = {
@@ -49,12 +49,6 @@ export const initializeQuickBaseManager = (
             `Generated temp token for DBID: ${dbid}: ${response.temporaryAuthorization}`
           );
         tempTokens.set(dbid, response.temporaryAuthorization);
-      } else if (logTokens) {
-        console.log(
-          `Using existing temp token for DBID: ${dbid}: ${tempTokens.get(
-            dbid
-          )} (may auto-renew if expired)`
-        );
       }
       instance.setTempToken(dbid, tempTokens.get(dbid)!);
     };

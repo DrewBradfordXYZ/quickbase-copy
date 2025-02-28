@@ -1,18 +1,28 @@
-// src/components/MyComponent.tsx
-import React, { useEffect, useState } from "react";
+// src/App.tsx
+import React, { useEffect, useState, useRef } from "react";
 import { useQuickBase } from "./hooks/useQuickBase";
+import { QuickBaseResponseGetApp, QuickBaseResponseGetFields } from "quickbase";
 
-const MyComponent: React.FC = () => {
-  const qb = useQuickBase({ logTokens: true }); // Enable token logging
-  const [appData, setAppData] = useState<any>(null);
-  const [tableData, setTableData] = useState<any>(null);
-  const [tableData2, setTableData2] = useState<any>(null);
-  const [extraTableData, setExtraTableData] = useState<any>(null);
+const App: React.FC = () => {
+  const qb = useQuickBase({ logTokens: true });
+  const [appData, setAppData] = useState<QuickBaseResponseGetApp | null>(null);
+  const [tableData, setTableData] = useState<QuickBaseResponseGetFields | null>(
+    null
+  );
+  const [tableData2, setTableData2] =
+    useState<QuickBaseResponseGetFields | null>(null); // Changed to setTableData2
+  const [extraTableData, setExtraTableData] =
+    useState<QuickBaseResponseGetFields | null>(null);
   const appId = import.meta.env.VITE_QUICKBASE_APP_DBID as string;
   const tableDbid = "buwai2zud";
-  const extraTableDbid = "buwai2zud"; // Using same DBID for testing renewal
+  const extraTableDbid = "buwai2zud";
+
+  const hasRun = useRef(false);
 
   useEffect(() => {
+    if (hasRun.current) return;
+    hasRun.current = true;
+
     console.log("Initial useEffect triggered");
 
     const fetchInitialData = async () => {
@@ -30,7 +40,7 @@ const MyComponent: React.FC = () => {
         console.log("Fetching table data (second call)...");
         const tableResponse2 = await qb.getFields({ tableId: tableDbid });
         console.log("Table data (second call) fetched successfully");
-        setTableData2(tableResponse2);
+        setTableData2(tableResponse2); // Use setTableData2 here
       } catch (error) {
         console.error("Error fetching initial data:", error);
       }
@@ -93,4 +103,4 @@ const MyComponent: React.FC = () => {
   );
 };
 
-export default MyComponent;
+export default App;

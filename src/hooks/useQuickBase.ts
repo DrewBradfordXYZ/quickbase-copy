@@ -7,6 +7,7 @@ export const useQuickBase = (
   options: { logTokens?: boolean } = {}
 ): QuickBase => {
   const { logTokens = false } = options;
+  const isProduction = import.meta.env.MODE === "production";
 
   const quickbase = useMemo(() => {
     const instance = quickbaseService.instance;
@@ -54,16 +55,31 @@ export const useQuickBase = (
               JSON.stringify(response.config.params) || "{No params}";
 
             if (logTokens) {
-              console.log(
-                `${url} API request. Params: ${params} Token: ${initialToken}`
-              );
-              if (finalToken !== initialToken) {
-                console.log(`Token renewed for DBID: ${dbid}: ${finalToken}`);
+              if (isProduction) {
+                console.log(
+                  `${url} API request. Params: ${params} Token: ${
+                    initialToken || "No initial token"
+                  }`
+                );
+                if (
+                  finalToken !== initialToken &&
+                  !finalToken.startsWith("QB-USER-TOKEN")
+                ) {
+                  console.log(`Token renewed for DBID: ${dbid}: ${finalToken}`);
+                }
+              } else {
+                console.log(
+                  `${url} API request. Params: ${params} User Token Auth`
+                );
               }
             }
 
-            // Always update tempTokens if a new token is detected
-            if (finalToken !== initialToken) {
+            // Update tempTokens only in production for temp token renewal
+            if (
+              isProduction &&
+              finalToken !== initialToken &&
+              !finalToken.startsWith("QB-USER-TOKEN")
+            ) {
               quickbaseService.tempTokens.set(dbid, finalToken);
             }
           }
@@ -74,7 +90,7 @@ export const useQuickBase = (
     };
 
     return new Proxy(instance, handler);
-  }, [logTokens]);
+  }, [logTokens, isProduction]); // Include isProduction in dependencies
 
   return quickbase;
 };
