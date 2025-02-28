@@ -1,20 +1,19 @@
 // src/hooks/useQuickBase.ts
 import { useMemo } from "react";
 import { quickbaseService } from "../services/quickbaseConfig";
+import { QuickBase } from "quickbase";
 
-export const useQuickBase = (options: { logTokens?: boolean } = {}) => {
+export const useQuickBase = (
+  options: { logTokens?: boolean } = {}
+): QuickBase => {
   const { logTokens = false } = options;
-  // Console log the appToken
-  if (logTokens) {
-    console.log("Service", quickbaseService);
-  }
 
   const quickbase = useMemo(() => {
     const instance = quickbaseService.instance;
 
-    const handler = {
-      get(target: any, prop: string) {
-        const originalMethod = target[prop];
+    const handler: ProxyHandler<QuickBase> = {
+      get(target: QuickBase, prop: string) {
+        const originalMethod = (target as any)[prop];
         if (typeof originalMethod !== "function" || prop === "setTempToken") {
           return originalMethod;
         }
@@ -30,21 +29,46 @@ export const useQuickBase = (options: { logTokens?: boolean } = {}) => {
 
           if (dbid) {
             await quickbaseService.ensureTempToken(dbid);
-            if (logTokens) {
-              const tempToken =
-                quickbaseService.tempTokens.get(dbid) || "No temp token set";
-              const url = prop.includes("App")
-                ? `/apps/${dbid}`
-                : `/fields?tableId=${dbid}`;
-              console.log(`API Request to ${url} with token: ${tempToken}`);
-            }
           } else {
             console.warn(
               `No DBID found for method ${prop}, proceeding without token setup`
             );
           }
 
-          return await originalMethod.apply(target, args);
+          // Use returnAxios: true to get full response
+          const callArgs = dbid
+            ? [...args.slice(0, -2), { ...args[0], returnAxios: true }]
+            : args;
+          const response = await originalMethod.apply(target, callArgs);
+
+          // Log tokens and update tempTokens after the call
+          if (dbid && response.config && response.config.headers) {
+            const finalToken =
+              response.config.headers["Authorization"]?.replace(
+                "QB-TEMP-TOKEN ",
+                ""
+              ) || "No token set";
+            const initialToken = quickbaseService.tempTokens.get(dbid);
+            const url = response.config.url || "Unknown URL";
+            const params =
+              JSON.stringify(response.config.params) || "{No params}";
+
+            if (logTokens) {
+              console.log(
+                `${url} API request. Params: ${params} Token: ${initialToken}`
+              );
+              if (finalToken !== initialToken) {
+                console.log(`Token renewed for DBID: ${dbid}: ${finalToken}`);
+              }
+            }
+
+            // Always update tempTokens if a new token is detected
+            if (finalToken !== initialToken) {
+              quickbaseService.tempTokens.set(dbid, finalToken);
+            }
+          }
+
+          return response.data; // Return data as expected
         };
       },
     };

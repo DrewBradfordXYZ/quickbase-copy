@@ -10,7 +10,7 @@ const MyComponent: React.FC = () => {
   const [extraTableData, setExtraTableData] = useState<any>(null);
   const appId = import.meta.env.VITE_QUICKBASE_APP_DBID as string;
   const tableDbid = "buwai2zud";
-  const extraTableDbid = "buwai2zud"; // Replace with a valid DBID
+  const extraTableDbid = "buwai2zud"; // Using same DBID for testing renewal
 
   useEffect(() => {
     console.log("Initial useEffect triggered");

@@ -8,11 +8,11 @@ if (!(window as any).quickBaseManager) {
   const isProduction = import.meta.env.MODE === "production";
   const tempTokens: Map<string, string> = new Map();
 
-  // console.log("Initializing QuickBase manager");
-  // console.log("Mode:", import.meta.env.MODE);
-  // console.log("User Token:", userToken ? "Set" : "Not set");
-  // console.log("App Token:", appToken ? "Set" : "Not set");
-  // console.log("Realm:", realm);
+  console.log("Initializing QuickBase manager");
+  console.log("Mode:", import.meta.env.MODE);
+  console.log("User Token:", userToken ? "Set" : "Not set");
+  console.log("App Token:", appToken ? "Set" : "Not set");
+  console.log("Realm:", realm);
 
   const options: QuickBaseOptions = {
     realm: realm,
@@ -30,14 +30,14 @@ if (!(window as any).quickBaseManager) {
   const ensureTempToken = async (dbid: string) => {
     if (!isProduction) return;
     if (!tempTokens.has(dbid)) {
+      console.log(`Generating initial temp token for DBID: ${dbid}`);
       const response = await instance.getTempTokenDBID({ dbid });
-      // console.log(
-      //   `Create initial temp token for ${dbid}:`,
-      //   response.temporaryAuthorization
-      // );
+      console.log("Temp token generated:", response.temporaryAuthorization);
       tempTokens.set(dbid, response.temporaryAuthorization);
     } else {
-      // console.log(`Try using existing temp token for ${dbid}`);
+      console.log(
+        `Setting existing temp token for DBID: ${dbid} (may auto-renew if expired)`
+      );
     }
     instance.setTempToken(dbid, tempTokens.get(dbid)!);
   };
