@@ -9,6 +9,7 @@ export default defineConfig({
     "process.env": process.env,
   },
   build: {
+    target: "esnext",
     sourcemap: false,
     chunkSizeWarningLimit: 1024, // Code pages can not excede 1 MB
     rollupOptions: {
